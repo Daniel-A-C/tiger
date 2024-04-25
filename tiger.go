@@ -48,13 +48,13 @@ func initScreen() (sc tcell.Screen) {
 }
 
 func runTestCorners(s tcell.Screen) { 
-	for {
+	testCorners(s)
+	run := true
+	for run {
 		switch ev := s.PollEvent().(type) {
 		case *tcell.EventKey:
-			//fmt.Print(" ", string(ev.Rune()))
 			if ev.Key() == tcell.KeyEscape || string(ev.Rune()) == "q" || ev.Key() == tcell.KeyCtrlC {
-				s.Fini()
-				os.Exit(0)
+				run = false
 			}
 			if string(ev.Rune()) == "p" {
 				emitStr(s, 0, 10, tcell.StyleDefault, "Hello!")
@@ -67,16 +67,32 @@ func runTestCorners(s tcell.Screen) {
 	}
 }
 
-func main() {
-	s := initScreen()
-	testCorners(s)
-	runTestCorners(s)
+func runFunVisual(s tcell.Screen) { 
+	run := true
+	count1 := 0
+	w, h := s.Size()
+	for run {
+		emitStr(s, w/2, h/2, tcell.StyleDefault, fmt.Sprintf("%d", count1))
+		s.Show()
+		count1 += 1
+
+		if s.HasPendingEvent() {
+			switch ev := s.PollEvent().(type) {
+			case *tcell.EventKey:
+				if ev.Key() == tcell.KeyEscape || string(ev.Rune()) == "q" || ev.Key() == tcell.KeyCtrlC {
+					run = false
+				}
+			}
+		}
+
+	}
 }
 
+func main() {
+	s := initScreen()
 
-//boxStyle := tcell.StyleDefault.Foreground(tcell.ColorWhite).Background(tcell.ColorPurple) defStyle := tcell.StyleDefault.Background(tcell.ColorReset).Foreground(tcell.ColorReset)
+	runFunVisual(s)
 
-//emitStr(s, 10, 10, defStyle, "Test")
-//s.Show()
-
-//time.Sleep(3 * time.Second)
+	s.Fini()
+	os.Exit(0)
+}
