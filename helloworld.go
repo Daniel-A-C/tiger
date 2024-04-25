@@ -5,8 +5,6 @@ import (
 	"os"
 
 	"github.com/gdamore/tcell/v2"
-	"github.com/gdamore/tcell/v2/encoding"
-
 	"github.com/mattn/go-runewidth"
 )
 
@@ -33,9 +31,12 @@ func displayHelloWorld(s tcell.Screen) {
 	s.Show()
 }
 
+func TestFunc() {
+	fmt.Print("test")
+}
+
 // This program just prints "Hello, World!".  Press ESC to exit.
-func main() {
-	encoding.Register()
+func Hello() {
 
 	s, e := tcell.NewScreen()
 	if e != nil {
