@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/gdamore/tcell/v2"
 )
 
@@ -22,6 +24,49 @@ func RunCounter(s tcell.Screen) {
 				}
 			}
 		}
+
+	}
+}
+
+func RunWave(s tcell.Screen) { 
+	run := true
+	count1 := 0
+	period := 10
+	wavePos := 0
+	w, h := s.Size()
+	waveChar := "*"
+	for run {
+		count1 += 1
+
+		if count1 >= period {
+			count1 = 0
+			
+			for i := wavePos; i > 0; i-- {
+				EmitStr(s, i, wavePos-i, tcell.StyleDefault, waveChar)
+			}
+			s.Show()
+
+			wavePos += 1
+			if wavePos >= w + h {
+				wavePos = 0
+				if waveChar == "*" {
+					waveChar = "-"
+				} else {
+					waveChar = "*"
+				}
+			}
+		}
+
+		if s.HasPendingEvent() {
+			switch ev := s.PollEvent().(type) {
+			case *tcell.EventKey:
+				if ev.Key() == tcell.KeyEscape || string(ev.Rune()) == "q" || ev.Key() == tcell.KeyCtrlC {
+					run = false
+				}
+			}
+		}
+
+		time.Sleep(1 * time.Millisecond)
 
 	}
 }
