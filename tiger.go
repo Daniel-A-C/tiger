@@ -7,9 +7,11 @@ import (
 func main() {
 	s := InitScreen()
 
-	RunWave(s)
+	//RunWave(s)
 	//RunCounter(s)
 	//RunTestCorners(s)
+	RunSnackGame(s)
+
 
 	s.Fini()
 	os.Exit(0)
