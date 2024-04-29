@@ -3,9 +3,25 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 	"github.com/gdamore/tcell/v2"
 	"github.com/mattn/go-runewidth"
 )
+
+type Timer struct {
+    startTime time.Time 
+}
+
+
+// start/reset function
+func (t *Timer) StartTimer() {
+    t.startTime = time.Now()
+}
+
+// elapsedTime function
+func (t *Timer) ElapsedTime() time.Duration {
+    return time.Since(t.startTime)  
+}
 
 func InitScreen() (sc tcell.Screen) {
 	s, e := tcell.NewScreen()
